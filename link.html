@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157a6e">
+  <meta name="description" content="Download Expiron for your device.">
+  <meta property="og:title" content="Expiron">
+  <meta property="og:description" content="Download Expiron for your device.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shohrukh-akhmatov.github.io/expira-legal/link.html">
+  <meta property="og:image" content="https://shohrukh-akhmatov.github.io/expira-legal/app-icon.png">
+  <link rel="canonical" href="https://shohrukh-akhmatov.github.io/expira-legal/link.html">
+  <title>Download Expiron</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7f6;
+      color: #17201f;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 280px; min-height: 100vh; background: #f5f7f6; color: #17201f; }
+    a:focus-visible { outline: 3px solid #e3a008; outline-offset: 3px; }
+    main {
+      width: min(100% - 32px, 680px);
+      min-height: calc(100vh - 64px);
+      margin: 0 auto;
+      padding: clamp(36px, 8vh, 88px) 0 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .icon {
+      width: 112px;
+      height: 112px;
+      border-radius: 24px;
+      box-shadow: 0 12px 28px rgba(21, 56, 52, .18);
+    }
+    h1 { margin: 24px 0 8px; font-size: clamp(38px, 8vw, 56px); line-height: 1.05; letter-spacing: 0; }
+    .tagline { margin: 0; color: #51605e; font-size: 18px; line-height: 1.5; }
+    .platforms { width: min(100%, 420px); margin-top: 36px; display: grid; gap: 12px; }
+    .platform {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 13px 18px;
+      border: 1px solid #157a6e;
+      border-radius: 8px;
+      background: #157a6e;
+      color: #fff;
+      text-align: left;
+      text-decoration: none;
+    }
+    .platform__name { display: block; font-size: 17px; font-weight: 750; }
+    .platform__action { flex: 0 0 auto; font-size: 13px; font-weight: 650; }
+    .platform.unavailable { border-color: #a6afad; background: transparent; color: #687471; cursor: default; }
+    footer {
+      margin-top: auto;
+      padding-top: 48px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 18px;
+      font-size: 14px;
+    }
+    footer a { color: #0d655b; text-underline-offset: 3px; }
+    .attribution { flex-basis: 100%; margin-top: 8px; color: #687471; font-size: 12px; }
+    @media (max-width: 360px) {
+      main { width: min(100% - 24px, 680px); }
+      .icon { width: 96px; height: 96px; border-radius: 20px; }
+      h1 { font-size: 36px; }
+      .platform { padding-inline: 14px; }
+    }
+    @media (prefers-color-scheme: dark) {
+      :root, body { background: #121716; color: #f4f7f6; }
+      .tagline { color: #b4bfbd; }
+      .platform.unavailable { color: #b4bfbd; border-color: #56615f; }
+      footer a { color: #72d2c6; }
+      .attribution { color: #9da9a6; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="icon" src="app-icon.png" alt="Expiron app icon" width="112" height="112">
+    <h1>Expiron</h1>
+    <p id="tagline" class="tagline">Choose where to download the app</p>
+
+    <div id="platforms" class="platforms" aria-label="Download options">
+      <a id="google-play" class="platform" href="https://play.google.com/store/apps/details?id=com.shohlabs.expiron">
+        <span class="platform__name">Google Play</span>
+        <span class="platform__action" data-copy="download">Download</span>
+      </a>
+      <a id="app-store" class="platform unavailable" aria-disabled="true">
+        <span class="platform__name">App Store</span>
+        <span class="platform__action" data-copy="soon">Coming soon</span>
+      </a>
+      <a id="rustore" class="platform unavailable" aria-disabled="true">
+        <span class="platform__name">RuStore</span>
+        <span class="platform__action" data-copy="soon">Coming soon</span>
+      </a>
+    </div>
+
+    <footer>
+      <a id="privacy" href="en/privacy.html">Privacy policy</a>
+      <a id="terms" href="en/eula.html">Terms and licenses</a>
+      <span class="attribution">Developed with the use of Yandex Mobile Ads SDK</span>
+    </footer>
+  </main>
+
+  <script>
+    // Add a store URL here when that version is published. Leave it empty to show "Coming soon".
+    const storeUrls = {
+      googlePlay: "https://play.google.com/store/apps/details?id=com.shohlabs.expiron",
+      appStore: "",
+      ruStore: ""
+    };
+
+    const translations = {
+      en: {
+        tagline: "Choose where to download the app",
+        download: "Download",
+        soon: "Coming soon",
+        privacy: "Privacy policy",
+        terms: "Terms and licenses"
+      },
+      ru: {
+        tagline: "Выберите, где скачать приложение",
+        download: "Скачать",
+        soon: "Скоро",
+        privacy: "Политика конфиденциальности",
+        terms: "Условия и лицензии"
+      },
+      es: {
+        tagline: "Elige dónde descargar la aplicación",
+        download: "Descargar",
+        soon: "Próximamente",
+        privacy: "Política de privacidad",
+        terms: "Condiciones y licencias"
+      },
+      pt: {
+        tagline: "Escolha onde baixar o aplicativo",
+        download: "Baixar",
+        soon: "Em breve",
+        privacy: "Política de privacidade",
+        terms: "Termos e licenças"
+      },
+      id: {
+        tagline: "Pilih tempat mengunduh aplikasi",
+        download: "Unduh",
+        soon: "Segera hadir",
+        privacy: "Kebijakan privasi",
+        terms: "Ketentuan dan lisensi"
+      }
+    };
+
+    const browserLanguage = (navigator.language || "en").toLowerCase();
+    const languageCode = browserLanguage.split("-")[0];
+    const usesRussianLegal = ["ru", "tg", "uz"].includes(languageCode);
+    const copyLanguage = usesRussianLegal ? "ru" : languageCode;
+    const copy = translations[copyLanguage] || translations.en;
+
+    document.documentElement.lang = copyLanguage in translations ? copyLanguage : "en";
+    document.getElementById("tagline").textContent = copy.tagline;
+    document.getElementById("privacy").textContent = copy.privacy;
+    document.getElementById("terms").textContent = copy.terms;
+    document.getElementById("privacy").href = usesRussianLegal ? "ru/privacy.html" : "en/privacy.html";
+    document.getElementById("terms").href = usesRussianLegal ? "ru/eula.html" : "en/eula.html";
+    document.querySelectorAll('[data-copy="download"]').forEach(element => { element.textContent = copy.download; });
+    document.querySelectorAll('[data-copy="soon"]').forEach(element => { element.textContent = copy.soon; });
+
+    const configureStore = (id, url) => {
+      const element = document.getElementById(id);
+      if (!url) return;
+      element.href = url;
+      element.classList.remove("unavailable");
+      element.removeAttribute("aria-disabled");
+      element.querySelector(".platform__action").textContent = copy.download;
+    };
+
+    configureStore("google-play", storeUrls.googlePlay);
+    configureStore("app-store", storeUrls.appStore);
+    configureStore("rustore", storeUrls.ruStore);
+  </script>
+</body>
+</html>
