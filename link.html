@@ -73,9 +73,11 @@
     /* Google bakes generous transparent padding into its badge, so it needs
        more height to read as the same size as the other two. */
     a.badge.googleplay img { height: 76px; margin-top: -12px; margin-bottom: -12px; }
-    /* A store the app is not on yet gets a plain row, never a badge: a store
-       badge is a link to your app on that store, and there is nothing to
-       link to until it ships. */
+    /* Every store shows its badge, whether or not the app has shipped there.
+       The ones it has not shipped to carry no href, so they are not links and
+       do not take focus; the "coming soon" row below is what they fall back to
+       if the artwork itself cannot be fetched. */
+    a.badge[aria-disabled="true"] { cursor: default; }
     .platform {
       width: 100%;
       min-height: 52px;
@@ -168,20 +170,20 @@
     <p id="tagline" class="tagline">Choose where to download the app</p>
 
     <div id="platforms" class="platforms" aria-label="Download options">
-      <a id="google-play" class="badge googleplay hidden" href="#"><img id="google-play-badge" alt="Google Play"></a>
-      <div id="google-play-soon" class="platform hidden">
-        <span class="platform__label">
-          <svg class="store-icon" aria-hidden="true" focusable="false"><use href="#store-googleplay"/></svg>
-          <span class="platform__name">Google Play</span>
-        </span>
-        <span class="platform__action" data-copy="soon">Coming soon</span>
-      </div>
-
       <a id="app-store" class="badge appstore hidden" href="#"><img id="app-store-badge" alt="App Store"></a>
       <div id="app-store-soon" class="platform hidden">
         <span class="platform__label">
           <svg class="store-icon" aria-hidden="true" focusable="false"><use href="#store-appstore"/></svg>
           <span class="platform__name">App Store</span>
+        </span>
+        <span class="platform__action" data-copy="soon">Coming soon</span>
+      </div>
+
+      <a id="google-play" class="badge googleplay hidden" href="#"><img id="google-play-badge" alt="Google Play"></a>
+      <div id="google-play-soon" class="platform hidden">
+        <span class="platform__label">
+          <svg class="store-icon" aria-hidden="true" focusable="false"><use href="#store-googleplay"/></svg>
+          <span class="platform__name">Google Play</span>
         </span>
         <span class="platform__action" data-copy="soon">Coming soon</span>
       </div>
@@ -381,13 +383,20 @@
     }
 
     // Points a badge anchor at vendor artwork. If the image cannot load --
-    // vendor CDN unreachable, or a network that blocks it -- the anchor
-    // degrades to a labelled row carrying the store's mark, matching the
-    // "coming soon" rows, rather than to an empty link.
-    function setBadge(anchorID, imageID, source, label, iconID) {
+    // vendor CDN unreachable, or a network that blocks it -- the badge is
+    // replaced by a text row rather than left as an empty gap. A published
+    // store falls back to a live link carrying its mark; an unpublished one
+    // falls back to the "coming soon" row, which says the useful thing.
+    function setBadge(anchorID, imageID, soonID, source, label, iconID,
+                      published) {
       const anchor = document.getElementById(anchorID);
       const image = document.getElementById(imageID);
       const degrade = function () {
+        if (!published) {
+          anchor.classList.add("hidden");
+          document.getElementById(soonID).classList.remove("hidden");
+          return;
+        }
         anchor.classList.remove("badge", "appstore", "googleplay", "rustore");
         anchor.classList.add("platform");
         anchor.textContent = "";
@@ -444,33 +453,36 @@
         el.textContent = copy.soon;
       });
 
-      configureStore("google-play", "google-play-badge", "google-play-soon",
-        storeUrls.googlePlay, googlePlayBadge(lang), copy.googlePlay,
-        "store-googleplay");
       configureStore("app-store", "app-store-badge", "app-store-soon",
         storeUrls.appStore, appStoreBadge(lang), copy.appStore,
         "store-appstore");
+      configureStore("google-play", "google-play-badge", "google-play-soon",
+        storeUrls.googlePlay, googlePlayBadge(lang), copy.googlePlay,
+        "store-googleplay");
       configureStore("rustore", "rustore-badge", "rustore-soon",
         storeUrls.ruStore, ruStoreBadge(), copy.ruStore, "store-rustore");
 
       renderLanguageSwitcher(lang);
     }
 
-    // Published stores get the badge; the rest get the muted "coming soon"
-    // row, so a badge never points at a store the app is absent from.
+    // Every store shows its badge. A published one is a link to the app; one
+    // the app has not shipped to yet drops its href, so it still reads as that
+    // store but does nothing when tapped and is skipped by keyboard and screen
+    // readers, which is what aria-disabled tells them.
     function configureStore(anchorID, imageID, soonID, url, badgeSource, label,
                             iconID) {
       const anchor = document.getElementById(anchorID);
       const soon = document.getElementById(soonID);
+      anchor.classList.remove("hidden");
+      soon.classList.add("hidden");
       if (url) {
         anchor.href = url;
-        anchor.classList.remove("hidden");
-        soon.classList.add("hidden");
-        setBadge(anchorID, imageID, badgeSource, label, iconID);
+        anchor.removeAttribute("aria-disabled");
       } else {
-        anchor.classList.add("hidden");
-        soon.classList.remove("hidden");
+        anchor.removeAttribute("href");
+        anchor.setAttribute("aria-disabled", "true");
       }
+      setBadge(anchorID, imageID, soonID, badgeSource, label, iconID, !!url);
     }
 
     apply(resolveLanguage());
