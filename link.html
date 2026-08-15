@@ -115,7 +115,10 @@
     }
     footer a { color: #0d655b; text-underline-offset: 3px; }
     .attribution { flex-basis: 100%; margin-top: 8px; color: #687471; font-size: 12px; }
-    .hidden { display: none; }
+    /* Has to out-rank `a.badge`'s own `display`, which is the more specific
+       selector, or an unpublished store's anchor stays on the page and shows
+       its broken image above the "coming soon" row. */
+    .hidden { display: none !important; }
     @media (max-width: 360px) {
       main { width: min(100% - 24px, 680px); }
       .icon { width: 96px; height: 96px; border-radius: 20px; }
