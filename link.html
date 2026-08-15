@@ -32,6 +32,22 @@
       align-items: center;
       text-align: center;
     }
+    .languages {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 14px;
+      margin-bottom: 28px;
+      font-size: 14px;
+    }
+    .languages a { color: #0d655b; text-decoration: none; }
+    .languages a:hover { text-decoration: underline; }
+    .languages a[aria-current="true"] {
+      color: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: default;
+    }
     .icon {
       width: 112px;
       height: 112px;
@@ -40,27 +56,57 @@
     }
     h1 { margin: 24px 0 8px; font-size: clamp(38px, 8vw, 56px); line-height: 1.05; letter-spacing: 0; }
     .tagline { margin: 0; color: #51605e; font-size: 18px; line-height: 1.5; }
-    .platforms { width: min(100%, 420px); margin-top: 36px; display: grid; gap: 12px; }
+    .platforms {
+      width: min(100%, 420px);
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    /* Official store artwork. Apple, Google and RuStore all allow linking to
+       your own app with their badge and all forbid redrawing or altering it,
+       so these are sized by height alone and never recoloured or stretched. */
+    a.badge { display: block; line-height: 0; }
+    a.badge img { display: block; width: auto; }
+    a.badge.appstore img, a.badge.rustore img { height: 52px; }
+    /* Google bakes generous transparent padding into its badge, so it needs
+       more height to read as the same size as the other two. */
+    a.badge.googleplay img { height: 76px; margin-top: -12px; margin-bottom: -12px; }
+    /* A store the app is not on yet gets a plain row, never a badge: a store
+       badge is a link to your app on that store, and there is nothing to
+       link to until it ships. */
     .platform {
-      min-height: 58px;
+      width: 100%;
+      min-height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
       padding: 13px 18px;
-      border: 1px solid #157a6e;
+      border: 1px solid #a6afad;
       border-radius: 8px;
-      background: #157a6e;
-      color: #fff;
+      background: transparent;
+      color: #687471;
       text-align: left;
-      text-decoration: none;
+      cursor: default;
     }
     .platform__name { display: block; font-size: 17px; font-weight: 750; }
     .platform__action { flex: 0 0 auto; font-size: 13px; font-weight: 650; }
-    .platform.unavailable { border-color: #a6afad; background: transparent; color: #687471; cursor: default; }
+    .legal {
+      width: min(100%, 420px);
+      margin-top: 44px;
+      padding-top: 24px;
+      border-top: 1px solid #d7dedc;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+    .legal h2 { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
+    .legal .row .label { color: #51605e; }
+    .legal a { color: #0d655b; text-underline-offset: 3px; }
     footer {
       margin-top: auto;
-      padding-top: 48px;
+      padding-top: 32px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -69,6 +115,7 @@
     }
     footer a { color: #0d655b; text-underline-offset: 3px; }
     .attribution { flex-basis: 100%; margin-top: 8px; color: #687471; font-size: 12px; }
+    .hidden { display: none; }
     @media (max-width: 360px) {
       main { width: min(100% - 24px, 680px); }
       .icon { width: 96px; height: 96px; border-radius: 20px; }
@@ -78,32 +125,56 @@
     @media (prefers-color-scheme: dark) {
       :root, body { background: #121716; color: #f4f7f6; }
       .tagline { color: #b4bfbd; }
-      .platform.unavailable { color: #b4bfbd; border-color: #56615f; }
-      footer a { color: #72d2c6; }
+      .platform { color: #b4bfbd; border-color: #56615f; }
+      .languages a, footer a, .legal a { color: #72d2c6; }
+      .languages a[aria-current="true"] { color: inherit; }
+      .legal { border-top-color: #2c3634; }
+      .legal .row .label { color: #b4bfbd; }
       .attribution { color: #9da9a6; }
     }
   </style>
 </head>
 <body>
   <main>
+    <nav id="languages" class="languages" aria-label="Language"></nav>
+
     <img class="icon" src="app-icon.png" alt="Expiron app icon" width="112" height="112">
     <h1>Expiron</h1>
     <p id="tagline" class="tagline">Choose where to download the app</p>
 
     <div id="platforms" class="platforms" aria-label="Download options">
-      <a id="google-play" class="platform" href="https://play.google.com/store/apps/details?id=com.shohlabs.expiron">
+      <a id="google-play" class="badge googleplay hidden" href="#"><img id="google-play-badge" alt="Google Play"></a>
+      <div id="google-play-soon" class="platform hidden">
         <span class="platform__name">Google Play</span>
-        <span class="platform__action" data-copy="download">Download</span>
-      </a>
-      <a id="app-store" class="platform unavailable" aria-disabled="true">
+        <span class="platform__action" data-copy="soon">Coming soon</span>
+      </div>
+
+      <a id="app-store" class="badge appstore hidden" href="#"><img id="app-store-badge" alt="App Store"></a>
+      <div id="app-store-soon" class="platform hidden">
         <span class="platform__name">App Store</span>
         <span class="platform__action" data-copy="soon">Coming soon</span>
-      </a>
-      <a id="rustore" class="platform unavailable" aria-disabled="true">
+      </div>
+
+      <a id="rustore" class="badge rustore hidden" href="#"><img id="rustore-badge" alt="RuStore"></a>
+      <div id="rustore-soon" class="platform hidden">
         <span class="platform__name">RuStore</span>
         <span class="platform__action" data-copy="soon">Coming soon</span>
-      </a>
+      </div>
     </div>
+
+    <section class="legal">
+      <h2 id="legal-heading">Legal documents</h2>
+      <div class="row">
+        <span class="label" id="privacy-label">Privacy policy:</span>
+        <a href="en/privacy.html">EN</a> ·
+        <a href="ru/privacy.html">RU</a>
+      </div>
+      <div class="row">
+        <span class="label" id="terms-label">Terms and licenses:</span>
+        <a href="en/eula.html">EN</a> ·
+        <a href="ru/eula.html">RU</a>
+      </div>
+    </section>
 
     <footer>
       <a id="privacy" href="en/privacy.html">Privacy policy</a>
@@ -113,7 +184,8 @@
   </main>
 
   <script>
-    // Add a store URL here when that version is published. Leave it empty to show "Coming soon".
+    // Add a store URL here when that version is published. Leave it empty and
+    // that store shows a "coming soon" row instead of a badge.
     const storeUrls = {
       googlePlay: "https://play.google.com/store/apps/details?id=com.shohlabs.expiron",
       appStore: "",
@@ -122,69 +194,218 @@
 
     const translations = {
       en: {
+        name: "English",
+        title: "Download Expiron",
         tagline: "Choose where to download the app",
         download: "Download",
         soon: "Coming soon",
         privacy: "Privacy policy",
-        terms: "Terms and licenses"
+        terms: "Terms and licenses",
+        legal: "Legal documents",
+        appStore: "Download on the App Store",
+        googlePlay: "Get it on Google Play",
+        ruStore: "Download on RuStore"
       },
       ru: {
+        name: "Русский",
+        title: "Скачать Expiron",
         tagline: "Выберите, где скачать приложение",
         download: "Скачать",
         soon: "Скоро",
         privacy: "Политика конфиденциальности",
-        terms: "Условия и лицензии"
+        terms: "Условия и лицензии",
+        legal: "Правовые документы",
+        appStore: "Загрузите в App Store",
+        googlePlay: "Доступно в Google Play",
+        ruStore: "Скачайте из RuStore"
       },
       es: {
+        name: "Español",
+        title: "Descargar Expiron",
         tagline: "Elige dónde descargar la aplicación",
         download: "Descargar",
         soon: "Próximamente",
         privacy: "Política de privacidad",
-        terms: "Condiciones y licencias"
+        terms: "Condiciones y licencias",
+        legal: "Documentos legales",
+        appStore: "Consíguelo en el App Store",
+        googlePlay: "Disponible en Google Play",
+        ruStore: "Descargar en RuStore"
       },
       pt: {
+        name: "Português",
+        title: "Baixar Expiron",
         tagline: "Escolha onde baixar o aplicativo",
         download: "Baixar",
         soon: "Em breve",
         privacy: "Política de privacidade",
-        terms: "Termos e licenças"
+        terms: "Termos e licenças",
+        legal: "Documentos legais",
+        appStore: "Baixar na App Store",
+        googlePlay: "Disponível no Google Play",
+        ruStore: "Baixar na RuStore"
       },
       id: {
+        name: "Bahasa Indonesia",
+        title: "Unduh Expiron",
         tagline: "Pilih tempat mengunduh aplikasi",
         download: "Unduh",
         soon: "Segera hadir",
         privacy: "Kebijakan privasi",
-        terms: "Ketentuan dan lisensi"
+        terms: "Ketentuan dan lisensi",
+        legal: "Dokumen hukum",
+        appStore: "Unduh di App Store",
+        googlePlay: "Dapatkan di Google Play",
+        ruStore: "Unduh di RuStore"
       }
     };
 
-    const browserLanguage = (navigator.language || "en").toLowerCase();
-    const languageCode = browserLanguage.split("-")[0];
-    const usesRussianLegal = ["ru", "tg", "uz"].includes(languageCode);
-    const copyLanguage = usesRussianLegal ? "ru" : languageCode;
-    const copy = translations[copyLanguage] || translations.en;
+    // Apple and Google render their badges per locale. RuStore publishes one
+    // rendering, in Russian, so its files are committed here -- it has no
+    // badge CDN to link against. The RuStore files are named for the surface
+    // they sit on, not the vendor's own dark/light labels, which name the
+    // plate and so read as the opposite.
+    const BADGE_LOCALE = { en: ["en-us", "en_us"], ru: ["ru-ru", "ru_ru"],
+      es: ["es-es", "es_es"], pt: ["pt-br", "pt_br"], id: ["id-id", "id_id"] };
 
-    document.documentElement.lang = copyLanguage in translations ? copyLanguage : "en";
-    document.getElementById("tagline").textContent = copy.tagline;
-    document.getElementById("privacy").textContent = copy.privacy;
-    document.getElementById("terms").textContent = copy.terms;
-    document.getElementById("privacy").href = usesRussianLegal ? "ru/privacy.html" : "en/privacy.html";
-    document.getElementById("terms").href = usesRussianLegal ? "ru/eula.html" : "en/eula.html";
-    document.querySelectorAll('[data-copy="download"]').forEach(element => { element.textContent = copy.download; });
-    document.querySelectorAll('[data-copy="soon"]').forEach(element => { element.textContent = copy.soon; });
+    function prefersDark() {
+      return !!(window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    }
 
-    const configureStore = (id, url) => {
-      const element = document.getElementById(id);
-      if (!url) return;
-      element.href = url;
-      element.classList.remove("unavailable");
-      element.removeAttribute("aria-disabled");
-      element.querySelector(".platform__action").textContent = copy.download;
-    };
+    function appStoreBadge(lang) {
+      return "https://tools.applemediaservices.com/api/badges/download-on-the-app-store/" +
+        (prefersDark() ? "white" : "black") + "/" + BADGE_LOCALE[lang][0] +
+        "?size=250x83";
+    }
 
-    configureStore("google-play", storeUrls.googlePlay);
-    configureStore("app-store", storeUrls.appStore);
-    configureStore("rustore", storeUrls.ruStore);
+    function googlePlayBadge(lang) {
+      const locale = BADGE_LOCALE[lang][1];
+      return "https://play.google.com/intl/" + locale +
+        "/badges/static/images/badges/" + locale.split("_")[0] +
+        "_badge_web_generic.png";
+    }
+
+    function ruStoreBadge() {
+      return prefersDark()
+        ? "assets/rustore-badge-on-dark.svg"
+        : "assets/rustore-badge-on-light.svg";
+    }
+
+    // Legal documents exist only in English and Russian. Readers whose
+    // language is closer to Russian than to English get the Russian set.
+    function usesRussianLegal(lang) {
+      return lang === "ru";
+    }
+
+    // An explicit ?lang= wins, then a previous choice, then the browser.
+    // Tajik and Uzbek speakers are sent to Russian, which they are far more
+    // likely to read than English.
+    function resolveLanguage() {
+      const requested = new URLSearchParams(window.location.search).get("lang");
+      if (requested && translations[requested]) {
+        try { localStorage.setItem("expiron-lang", requested); } catch (e) {}
+        return requested;
+      }
+      let stored = null;
+      try { stored = localStorage.getItem("expiron-lang"); } catch (e) {}
+      if (stored && translations[stored]) return stored;
+
+      const browser = ((navigator.languages && navigator.languages[0]) ||
+        navigator.language || "en").toLowerCase();
+      const code = browser.split("-")[0];
+      if (["ru", "tg", "uz", "kk", "ky"].includes(code)) return "ru";
+      return translations[code] ? code : "en";
+    }
+
+    // Points a badge anchor at vendor artwork. If the image cannot load --
+    // vendor CDN unreachable, or a network that blocks it -- the anchor
+    // degrades to a plain labelled button rather than an empty link.
+    function setBadge(anchorID, imageID, source, label) {
+      const anchor = document.getElementById(anchorID);
+      const image = document.getElementById(imageID);
+      if (!image) {
+        anchor.textContent = label;
+        return;
+      }
+      image.alt = label;
+      image.onerror = function () {
+        anchor.classList.remove("badge", "appstore", "googleplay", "rustore");
+        anchor.classList.add("platform");
+        anchor.textContent = label;
+      };
+      image.src = source;
+    }
+
+    function renderLanguageSwitcher(active) {
+      const nav = document.getElementById("languages");
+      nav.textContent = "";
+      Object.keys(translations).forEach(function (code, index) {
+        if (index > 0) nav.appendChild(document.createTextNode("·"));
+        const link = document.createElement("a");
+        link.href = "?lang=" + code;
+        link.hreflang = code;
+        link.textContent = translations[code].name;
+        link.setAttribute("aria-current", String(code === active));
+        link.onclick = function (event) {
+          event.preventDefault();
+          try { localStorage.setItem("expiron-lang", code); } catch (e) {}
+          history.replaceState(null, "", "?lang=" + code);
+          apply(code);
+        };
+        nav.appendChild(link);
+      });
+    }
+
+    function apply(lang) {
+      const copy = translations[lang];
+      const russianLegal = usesRussianLegal(lang);
+
+      document.documentElement.lang = lang;
+      document.title = copy.title;
+      document.getElementById("tagline").textContent = copy.tagline;
+      document.getElementById("legal-heading").textContent = copy.legal;
+      document.getElementById("privacy-label").textContent = copy.privacy + ":";
+      document.getElementById("terms-label").textContent = copy.terms + ":";
+
+      const privacy = document.getElementById("privacy");
+      const terms = document.getElementById("terms");
+      privacy.textContent = copy.privacy;
+      terms.textContent = copy.terms;
+      privacy.href = russianLegal ? "ru/privacy.html" : "en/privacy.html";
+      terms.href = russianLegal ? "ru/eula.html" : "en/eula.html";
+
+      document.querySelectorAll('[data-copy="soon"]').forEach(function (el) {
+        el.textContent = copy.soon;
+      });
+
+      configureStore("google-play", "google-play-badge", "google-play-soon",
+        storeUrls.googlePlay, googlePlayBadge(lang), copy.googlePlay);
+      configureStore("app-store", "app-store-badge", "app-store-soon",
+        storeUrls.appStore, appStoreBadge(lang), copy.appStore);
+      configureStore("rustore", "rustore-badge", "rustore-soon",
+        storeUrls.ruStore, ruStoreBadge(), copy.ruStore);
+
+      renderLanguageSwitcher(lang);
+    }
+
+    // Published stores get the badge; the rest get the muted "coming soon"
+    // row, so a badge never points at a store the app is absent from.
+    function configureStore(anchorID, imageID, soonID, url, badgeSource, label) {
+      const anchor = document.getElementById(anchorID);
+      const soon = document.getElementById(soonID);
+      if (url) {
+        anchor.href = url;
+        anchor.classList.remove("hidden");
+        soon.classList.add("hidden");
+        setBadge(anchorID, imageID, badgeSource, label);
+      } else {
+        anchor.classList.add("hidden");
+        soon.classList.remove("hidden");
+      }
+    }
+
+    apply(resolveLanguage());
   </script>
 </body>
 </html>
