@@ -12,6 +12,7 @@
   <meta property="og:image" content="https://shohrukh-akhmatov.github.io/expira-legal/app-icon.png">
   <link rel="canonical" href="https://shohrukh-akhmatov.github.io/expira-legal/link.html">
   <title>Download Expiron</title>
+
   <style>
     :root {
       color-scheme: light dark;
@@ -19,9 +20,22 @@
       background: #f5f7f6;
       color: #17201f;
     }
+
     * { box-sizing: border-box; }
-    body { margin: 0; min-width: 280px; min-height: 100vh; background: #f5f7f6; color: #17201f; }
-    a:focus-visible { outline: 3px solid #e3a008; outline-offset: 3px; }
+
+    body {
+      margin: 0;
+      min-width: 280px;
+      min-height: 100vh;
+      background: #f5f7f6;
+      color: #17201f;
+    }
+
+    a:focus-visible {
+      outline: 3px solid #e3a008;
+      outline-offset: 3px;
+    }
+
     main {
       width: min(100% - 32px, 680px);
       min-height: calc(100vh - 64px);
@@ -32,6 +46,7 @@
       align-items: center;
       text-align: center;
     }
+
     .languages {
       display: flex;
       flex-wrap: wrap;
@@ -40,22 +55,48 @@
       margin-bottom: 28px;
       font-size: 14px;
     }
-    .languages a { color: #0d655b; text-decoration: none; }
+
+    .languages a {
+      color: #0d655b;
+      text-decoration: none;
+    }
+
     .languages a:hover { text-decoration: underline; }
-    .languages a[aria-current="true"] { color: inherit; font-weight: 700; text-decoration: none; cursor: default; }
+
+    .languages a[aria-current="true"] {
+      color: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: default;
+    }
+
     .icon {
       width: 112px;
       height: 112px;
       border-radius: 24px;
       box-shadow: 0 12px 28px rgba(21, 56, 52, .18);
     }
-    h1 { margin: 24px 0 8px; font-size: clamp(38px, 8vw, 56px); line-height: 1.05; }
-    .tagline { margin: 0; color: #51605e; font-size: 18px; line-height: 1.5; }
 
-    /* Official store artwork is never redrawn, recolored, stretched or cropped.
-       Every store gets the same 220x95 click/placement slot. The artwork itself
-       keeps its native aspect ratio at a common 63px height, leaving 16px of
-       clear space above and below (more than 1/4 of the badge height). */
+    h1 {
+      margin: 24px 0 8px;
+      font-size: clamp(38px, 8vw, 56px);
+      line-height: 1.05;
+    }
+
+    .tagline {
+      margin: 0;
+      color: #51605e;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    /*
+      Store artwork itself is never redrawn, recolored, stretched or cropped.
+      Each store occupies the same 220 × 95 placement area. Official badges keep
+      their native proportions. Google Play's official PNG includes transparent
+      outer padding, so its image canvas is intentionally rendered larger to make
+      the visible badge comparable in size to the other 188 × 63 store plates.
+    */
     .platforms {
       width: min(100%, 420px);
       margin-top: 28px;
@@ -64,6 +105,7 @@
       align-items: center;
       gap: 0;
     }
+
     .store-slot {
       width: 220px;
       height: 95px;
@@ -71,6 +113,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .store-link {
       width: 220px;
       height: 95px;
@@ -79,7 +122,9 @@
       justify-content: center;
       text-decoration: none;
     }
+
     .store-link.is-active { display: flex; }
+
     .store-badge {
       display: block;
       width: auto;
@@ -87,23 +132,76 @@
       max-width: 188px;
       object-fit: contain;
     }
+
+    /* Google's official web PNG has transparent padding around the black badge. */
+    #google-play .store-badge {
+      width: 220px;
+      height: auto;
+      max-width: none;
+    }
+
+    /*
+      Unpublished stores deliberately use neutral glyphs rather than standalone
+      vendor logos. This avoids suggesting that an unavailable store version can
+      already be downloaded, and avoids using Apple branding outside its badge.
+    */
     .store-unavailable {
       width: 188px;
       height: 63px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      gap: 12px;
+      padding: 0 17px;
       border: 1px solid #c7d0ce;
       border-radius: 10px;
-      background: rgba(255,255,255,.45);
+      background: rgba(255, 255, 255, .45);
       color: #2f3c3a;
-      font-size: 17px;
-      font-weight: 650;
-      line-height: 1.15;
+      text-align: left;
     }
-    .store-unavailable span { margin-top: 4px; color: #697573; font-size: 12px; font-weight: 500; }
+
     .store-unavailable[hidden] { display: none; }
+
+    .placeholder-icon {
+      flex: 0 0 auto;
+      width: 30px;
+      height: 30px;
+      color: #40504d;
+    }
+
+    .placeholder-icon svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .store-unavailable__copy {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      line-height: 1.12;
+    }
+
+    .store-unavailable__name {
+      font-size: 17px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .store-unavailable__status {
+      margin-top: 4px;
+      color: #697573;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
 
     .legal {
       width: min(100%, 420px);
@@ -113,9 +211,20 @@
       font-size: 14px;
       line-height: 1.9;
     }
-    .legal h2 { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
+
+    .legal h2 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
     .legal .row .label { color: #51605e; }
-    .legal a { color: #0d655b; text-underline-offset: 3px; }
+
+    .legal a {
+      color: #0d655b;
+      text-underline-offset: 3px;
+    }
+
     footer {
       margin-top: auto;
       padding-top: 32px;
@@ -125,21 +234,55 @@
       gap: 8px 18px;
       font-size: 14px;
     }
-    footer a { color: #0d655b; text-underline-offset: 3px; }
-    .attribution { flex-basis: 100%; margin-top: 8px; color: #687471; font-size: 12px; line-height: 1.5; }
-    .trademarks { flex-basis: 100%; max-width: 560px; color: #7b8583; font-size: 10px; line-height: 1.45; }
+
+    footer a {
+      color: #0d655b;
+      text-underline-offset: 3px;
+    }
+
+    .attribution {
+      flex-basis: 100%;
+      margin-top: 8px;
+      color: #687471;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .trademarks {
+      flex-basis: 100%;
+      max-width: 560px;
+      color: #7b8583;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
     @media (max-width: 360px) {
       main { width: min(100% - 24px, 680px); }
       .icon { width: 96px; height: 96px; border-radius: 20px; }
       h1 { font-size: 36px; }
     }
+
     @media (prefers-color-scheme: dark) {
-      :root, body { background: #121716; color: #f4f7f6; }
+      :root,
+      body {
+        background: #121716;
+        color: #f4f7f6;
+      }
+
       .tagline { color: #b4bfbd; }
-      .languages a, footer a, .legal a { color: #72d2c6; }
+      .languages a,
+      footer a,
+      .legal a { color: #72d2c6; }
       .languages a[aria-current="true"] { color: inherit; }
-      .store-unavailable { background: rgba(255,255,255,.04); border-color: #394441; color: #e8eceb; }
-      .store-unavailable span { color: #a9b4b1; }
+
+      .store-unavailable {
+        background: rgba(255, 255, 255, .04);
+        border-color: #394441;
+        color: #e8eceb;
+      }
+
+      .placeholder-icon { color: #dce4e2; }
+      .store-unavailable__status { color: #a9b4b1; }
       .legal { border-top-color: #2c3634; }
       .legal .row .label { color: #b4bfbd; }
       .attribution { color: #9da9a6; }
@@ -147,6 +290,7 @@
     }
   </style>
 </head>
+
 <body>
   <main>
     <nav id="languages" class="languages" aria-label="Language"></nav>
@@ -158,19 +302,52 @@
     <div id="platforms" class="platforms" aria-label="Download options">
       <div class="store-slot">
         <a id="app-store" class="store-link" target="_blank" rel="noopener noreferrer">
-          <img class="store-badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" width="188" height="63">
+          <img
+            class="store-badge"
+            src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+            alt="Download on the App Store"
+            width="188"
+            height="63">
         </a>
+
         <div id="app-store-unavailable" class="store-unavailable" aria-disabled="true">
-          App Store <span>Coming soon</span>
+          <span class="placeholder-icon" aria-hidden="true">
+            <!-- Neutral phone + download glyph: intentionally not an Apple logo. -->
+            <svg viewBox="0 0 32 32">
+              <rect x="7.5" y="3.5" width="17" height="25" rx="3.2"></rect>
+              <path d="M13 18.5 16 21.5 19 18.5"></path>
+              <path d="M16 11v10"></path>
+              <path d="M13.5 25h5"></path>
+            </svg>
+          </span>
+          <span class="store-unavailable__copy">
+            <span class="store-unavailable__name">App Store</span>
+            <span class="store-unavailable__status">Coming soon</span>
+          </span>
         </div>
       </div>
 
       <div class="store-slot">
         <a id="google-play" class="store-link" target="_blank" rel="noopener noreferrer">
-          <img class="store-badge" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" width="188" height="63">
+          <img
+            class="store-badge"
+            src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+            alt="Get it on Google Play">
         </a>
+
         <div id="google-play-unavailable" class="store-unavailable" aria-disabled="true">
-          Google Play <span>Coming soon</span>
+          <span class="placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32">
+              <rect x="7.5" y="3.5" width="17" height="25" rx="3.2"></rect>
+              <path d="M13 18.5 16 21.5 19 18.5"></path>
+              <path d="M16 11v10"></path>
+              <path d="M13.5 25h5"></path>
+            </svg>
+          </span>
+          <span class="store-unavailable__copy">
+            <span class="store-unavailable__name">Google Play</span>
+            <span class="store-unavailable__status">Coming soon</span>
+          </span>
         </div>
       </div>
 
@@ -178,11 +355,30 @@
         <a id="rustore" class="store-link" target="_blank" rel="noopener noreferrer">
           <picture>
             <source media="(prefers-color-scheme: dark)" srcset="assets/rustore-badge-on-dark.svg">
-            <img class="store-badge" src="assets/rustore-badge-on-light.svg" alt="Скачайте из RuStore" width="188" height="63">
+            <img
+              class="store-badge"
+              src="assets/rustore-badge-on-light.svg"
+              alt="Скачайте из RuStore"
+              width="188"
+              height="63">
           </picture>
         </a>
+
         <div id="rustore-unavailable" class="store-unavailable" aria-disabled="true">
-          RuStore <span>Coming soon</span>
+          <span class="placeholder-icon" aria-hidden="true">
+            <!-- Neutral storefront glyph while the RuStore listing is unavailable. -->
+            <svg viewBox="0 0 32 32">
+              <path d="M6 13h20"></path>
+              <path d="M8 13v13h16V13"></path>
+              <path d="M5 13 8 6h16l3 7"></path>
+              <path d="M11 26v-7h6v7"></path>
+              <path d="M21 17v4"></path>
+            </svg>
+          </span>
+          <span class="store-unavailable__copy">
+            <span class="store-unavailable__name">RuStore</span>
+            <span class="store-unavailable__status">Coming soon</span>
+          </span>
         </div>
       </div>
     </div>
@@ -210,8 +406,7 @@
   </main>
 
   <script>
-    // A store badge appears only after its real product URL is set. This keeps
-    // download badges from implying availability before the app is published.
+    // A branded store badge appears only after its real product URL is set.
     const storeUrls = {
       googlePlay: "https://play.google.com/store/apps/details?id=com.shohlabs.expiron",
       appStore: "",
@@ -291,6 +486,7 @@
         try { localStorage.setItem("expiron-lang", requested); } catch (e) {}
         return requested;
       }
+
       let stored = null;
       try { stored = localStorage.getItem("expiron-lang"); } catch (e) {}
       if (stored && translations[stored]) return stored;
@@ -304,8 +500,10 @@
     function renderLanguageSwitcher(active) {
       const nav = document.getElementById("languages");
       nav.textContent = "";
+
       Object.keys(translations).forEach(function (code, index) {
         if (index > 0) nav.appendChild(document.createTextNode("·"));
+
         const link = document.createElement("a");
         link.href = "?lang=" + code;
         link.hreflang = code;
@@ -317,6 +515,7 @@
           history.replaceState(null, "", "?lang=" + code);
           apply(code);
         };
+
         nav.appendChild(link);
       });
     }
@@ -324,8 +523,9 @@
     function configureStore(anchorID, url, accessibleLabel, comingSoon) {
       const anchor = document.getElementById(anchorID);
       const unavailable = document.getElementById(anchorID + "-unavailable");
+
       anchor.setAttribute("aria-label", accessibleLabel);
-      unavailable.querySelector("span").textContent = comingSoon;
+      unavailable.querySelector(".store-unavailable__status").textContent = comingSoon;
 
       if (url) {
         anchor.href = url;
